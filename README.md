@@ -26,19 +26,11 @@ $ serverless deploy
 
 ### Invocation
 
-After successful deployment, you can invoke the deployed function by using the following command:
+1. Send a message to payments.fifo queue from AWS console. An example message can be found in sample.json file
+2. Upload a json file to all-payments S3 bucket
+3. The aggreagated data can be found in Payments DynamoDB
 
-```bash
-serverless invoke --function hello
-```
 
-Which should result in response similar to the following:
-
-```json
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
+### Architecture
 
 ![screenshot](Architecture.png)

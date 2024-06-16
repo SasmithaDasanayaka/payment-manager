@@ -21,6 +21,7 @@ class DynamoDbManager {
         message: error.message,
         stack: error.stack,
       });
+      throw error;
     }
   }
 }
