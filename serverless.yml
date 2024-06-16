@@ -13,6 +13,9 @@ provider:
           Resource: 
             - arn:aws:dynamodb:${self:provider.region}:*:table/Payments
 
+custom:
+  bucketName: all-payments-${sls:instanceId}
+
 functions:
   SQSPaymentsHandler:
     handler: src/deliveries/index.handleSqsPayments
@@ -23,16 +26,22 @@ functions:
           arn: !GetAtt PaymentsQueue.Arn
           batchSize: 10
           functionResponseType: ReportBatchItemFailures
-    package:
-      include:
-        - node_modules/aws-sdk/**
+  
+  S3PaymentsHandler:
+    handler: src/deliveries/index.handleS3Payments
+    environment:
+      discount: 5
+    events:
+      - s3:
+          bucket: ${self:custom.bucketName}
+          event: s3:ObjectCreated:*
 
 resources:
   Resources:
     PaymentsBucket:
       Type: "AWS::S3::Bucket"
       Properties:
-        BucketName: payments-${sls:instanceId}
+        BucketName: ${self:custom.bucketName}
 
     PaymentsQueue:
       Type: AWS::SQS::Queue
