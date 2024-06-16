@@ -30,11 +30,12 @@ functions:
   S3PaymentsHandler:
     handler: src/deliveries/index.handleS3Payments
     environment:
-      discount: 5
+      discount: 10
     events:
       - s3:
           bucket: ${self:custom.bucketName}
           event: s3:ObjectCreated:*
+          existing: true
 
 resources:
   Resources:
