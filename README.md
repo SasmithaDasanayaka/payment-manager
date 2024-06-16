@@ -27,10 +27,17 @@ $ serverless deploy
 ### Invocation
 
 1. Send a message to payments.fifo queue from AWS console. An example message can be found in sample.json file
-2. Upload a json file to all-payments S3 bucket
+2. Upload a json file to all-payments S3 bucket. An example json file is sample.json file
 3. The aggreagated data can be found in Payments DynamoDB
+4. Access payment-manager-dev-SQSPaymentsHandler and payment-manager-dev-S3PaymentsHandler cloudwatch log groups for monitoring the logs. 
 
 
 ### Architecture
+
+## Decisions
+1. Implemented the redrive policy to retry processing the messages published to SQS and eventually persist the failed messages in the dead letter queue.
+2. Used a FIFO queue to maintain the order of the received messages.
+3. Returned the batch failure items after processing the SQS events to avoid processing the successful events again.
+4. Introduced environment variables to Lambda functions to avoid deployments when changing the variable values.
 
 ![screenshot](Architecture.png)
