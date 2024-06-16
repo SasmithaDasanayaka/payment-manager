@@ -26,4 +26,8 @@ $ serverless deploy
 3. Returned the batch failure items after processing the SQS events to avoid processing the successful events again.
 4. Introduced environment variables to Lambda functions to avoid deployments when changing the variable values.
 
+#### Improvements
+1. Instead of directly invoking a Lambda function for S3 object insertion, first send the message to a message broker (SQS) to ensure that Lambda failures do not result in lost events.
+2. Instead of immediately retrying Lambda function invocations on failure, adopt a backoff algorithm to wait before the next iteration.
+
 ![screenshot](Architecture.png)
